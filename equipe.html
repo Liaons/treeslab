@@ -94,11 +94,15 @@
 
     async function loadTeam() {
       try {
+        console.log('Carregando equipe...');
         const response = await fetch('trees_lab_people_clean.csv');
         const text = await response.text();
+        console.log('CSV carregado, tamanho:', text.length);
         const data = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        console.log('Dados parseados:', data.length, 'membros');
         
         teamData = data.filter(row => row.name && row.name.trim());
+        console.log('Dados filtrados:', teamData.length, 'membros válidos');
         
         renderTeam();
         updateStatistics();
@@ -135,14 +139,16 @@
         
         // Create collapsible section
         const sectionHtml = `
-          <button class="collapsible" onclick="toggleCollapsible(this)">
-            <span>${categoryEmoji} ${categoryLabel} (${members.length})</span>
-            <span class="collapsible-icon">▼</span>
-          </button>
-          <div class="collapsible-content">
-            <div class="collapsible-inner">
-              <div class="grid grid-2">
-                ${members.map(member => renderMemberCard(member)).join('')}
+          <div class="team-section">
+            <button class="collapsible" onclick="toggleCollapsible(this)">
+              <span>${categoryEmoji} ${categoryLabel} (${members.length})</span>
+              <span class="collapsible-icon">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="collapsible-inner">
+                <div class="team-grid">
+                  ${members.map(member => renderMemberCard(member)).join('')}
+                </div>
               </div>
             </div>
           </div>
@@ -159,44 +165,54 @@
     }
 
     function renderMemberCard(member) {
-      const initials = member.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+      // Use os campos corretos do CSV (em inglês)
+      const name = member.name || '';
+      const category = member.category || '';
+      const photo = member.photo || '';
+      const research = member.research || '';
+      const expertise = member.expertise || '';
+      const linkedin = member.linkedin || '';
+      const researchgate = member.researchgate || '';
+      const orcid = member.orcid || '';
       
+      // Mapear categorias para funções em português
+      const roleMap = {
+        'leaders': 'Líder de Pesquisa',
+        'postdocs': 'Pós-Doutorando',
+        'phd': 'Doutorando',
+        'master': 'Mestrando',
+        'undergrad': 'Graduando',
+        'collaborators': 'Colaborador',
+        'former': 'Ex-Membro'
+      };
+      
+      const role = roleMap[category] || 'Pesquisador';
+      const initials = name ? name.split(' ').map(n => n[0]).join('').substring(0, 2) : '';
+
       return `
-        <div class="card text-center">
-          ${member.photo ? 
-            `<img src="${member.photo}" alt="${member.name}" class="team-photo">` : 
-            `<div class="team-photo" style="background: linear-gradient(135deg, #2d6a57, #1f4a3a); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
-              ${initials}
-            </div>`
-          }
-          <h3 class="team-name">${member.name}</h3>
-          ${member.research ? `<p class="team-research">${truncateText(member.research, 150)}</p>` : ''}
-          ${member.expertise ? `<p class="team-expertise">${member.expertise}</p>` : ''}
-          ${renderEducationInfo(member)}
-          <div class="team-links">
-            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="team-link" title="LinkedIn">LI</a>` : ''}
-            ${member.researchgate ? `<a href="${member.researchgate}" target="_blank" class="team-link" title="ResearchGate">RG</a>` : ''}
-            ${member.orcid ? `<a href="${member.orcid}" target="_blank" class="team-link" title="ORCID">OR</a>` : ''}
+        <div class="team-card-modern">
+          <div class="team-card-photo">
+            ${photo ? `<img src="${photo}" alt="${name}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmNWY1ZjUiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI4NSIgcj0iMzUiIGZpbGw9IiNkZGRkZGQiLz48cGF0aCBkPSJNNjAgMTYwYzAtMjIuMDkgMTcuOTEtNDAgNDAtNDBzNDAgMTcuOTEgNDAgNDB2NDBINjB2LTQweiIgZmlsbD0iI2RkZGRkZCIvPjwvc3ZnPg=='; this.style.display='block';">` : `<div class="photo-placeholder">${initials}</div>`}
+            <div class="team-card-overlay">
+              <div class="team-card-links">
+                ${linkedin ? `<a href="${linkedin}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+                ${orcid ? `<a href="${orcid}" target="_blank" title="ORCID"><i class="fab fa-orcid"></i></a>` : ''}
+                ${researchgate ? `<a href="${researchgate}" target="_blank" title="ResearchGate"><i class="fab fa-researchgate"></i></a>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="team-card-content">
+            <h3 class="team-member-name">${name}</h3>
+            <p class="team-member-role">${role}</p>
+            ${research ? `<p class="team-member-bio">${truncateText(research, 120)}</p>` : ''}
+            ${expertise ? `<div class="team-member-expertise"><strong>Especialidades:</strong> ${truncateText(expertise, 80)}</div>` : ''}
           </div>
         </div>
       `;
     }
 
-    function renderEducationInfo(member) {
-      const education = [];
-      if (member.master) education.push(`Mestrado: ${member.master}`);
-      if (member.phd) education.push(`Doutorado: ${member.phd}`);
-      if (member.postdoc) education.push(`Pós-doc: ${member.postdoc}`);
-      
-      if (education.length > 0) {
-        return `<div style="font-size: 0.85rem; color: #666; margin: 0.5rem 0; text-align: left;">
-          ${education.map(edu => `<div>• ${edu}</div>`).join('')}
-        </div>`;
-      }
-      return '';
-    }
-
     function truncateText(text, maxLength) {
+      if (!text || typeof text !== 'string') return '';
       if (text.length <= maxLength) return text;
       return text.substring(0, maxLength) + '...';
     }
