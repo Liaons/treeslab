@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TREES Lab</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #2d6a57; color: #fff; padding: 1em; text-align: center; }
+    nav { display: flex; justify-content: center; gap: 1em; background: #1f4a3a; }
+    nav a { color: #fff; padding: 0.5em 1em; text-decoration: none; }
+    nav a:hover { background: #2d6a57; }
+    section { padding: 2em; }
+    h2 { color: #2d6a57; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; }
+    th { background: #f0f0f0; }
+    .card { border: 1px solid #ddd; padding: 1em; margin: 1em 0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TREES Lab</h1>
+    <p>Grupo de Pesquisa em Sensoriamento Remoto e Ecologia</p>
+  </header>
+  <nav>
+    <a href="#sobre">Sobre</a>
+    <a href="#producoes">Produções</a>
+    <a href="#equipe">Equipe</a>
+  </nav>
+  <section id="sobre">
+    <h2>Sobre</h2>
+    <p>Informações extraídas do anuário e site antigo. Inclui missão, histórico e destaques do grupo.</p>
+  </section>
+  <section id="producoes">
+    <h2>Produções</h2>
+    <div id="pubs"></div>
+  </section>
+  <section id="equipe">
+    <h2>Equipe</h2>
+    <div id="team"></div>
+  </section>
+  <script>
+    const CONFIG = {
+      BASE: 'https://raw.githubusercontent.com/Liaons/treeslab/main/',
+      FILES: {
+        pubs: 'peer_reviewed_scientific_articles.csv',
+        team: 'trees_lab_people_clean.csv'
+      }
+    };
+
+    async function fetchCSV(url) {
+      const res = await fetch(url);
+      const text = await res.text();
+      return Papa.parse(text, { header: true }).data;
+    }
+
+    function renderTable(container, data) {
+      if (!data.length) return;
+      const keys = Object.keys(data[0]);
+      let html = '<table><thead><tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr></thead><tbody>';
+      html += data.map(row => '<tr>' + keys.map(k => `<td>${row[k]||''}</td>`).join('') + '</tr>').join('');
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const pubsData = await fetchCSV(CONFIG.BASE + CONFIG.FILES.pubs);
+      renderTable(document.getElementById('pubs'), pubsData);
+      const teamData = await fetchCSV(CONFIG.BASE + CONFIG.FILES.team);
+      renderTable(document.getElementById('team'), teamData);
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</body>
+</html>
