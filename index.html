@@ -12,10 +12,9 @@
     nav a:hover { background: #2d6a57; }
     section { padding: 2em; }
     h2 { color: #2d6a57; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
-    th, td { border: 1px solid #ccc; padding: 0.5em; }
-    th { background: #f0f0f0; }
     .card { border: 1px solid #ddd; padding: 1em; margin: 1em 0; border-radius: 6px; }
+    .team-grid { display: flex; flex-wrap: wrap; gap: 1em; }
+    .team-card img { max-width: 150px; border-radius: 50%; }
   </style>
 </head>
 <body>
@@ -38,39 +37,53 @@
   </section>
   <section id="equipe">
     <h2>Equipe</h2>
-    <div id="team"></div>
+    <div id="team" class="team-grid"></div>
   </section>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-    const CONFIG = {
-      BASE: 'https://raw.githubusercontent.com/Liaons/treeslab/main/',
-      FILES: {
-        pubs: 'peer_reviewed_scientific_articles.csv',
-        team: 'trees_lab_people_clean.csv'
-      }
+    const FILES = {
+      pubs: 'peer_reviewed_scientific_articles.csv',
+      team: 'trees_lab_people_clean.csv'
     };
 
-    async function fetchCSV(url) {
-      const res = await fetch(url);
+    async function fetchCSV(path) {
+      const res = await fetch(path);
       const text = await res.text();
-      return Papa.parse(text, { header: true }).data;
+      return Papa.parse(text, { header: true, skipEmptyLines: true }).data;
     }
 
-    function renderTable(container, data) {
-      if (!data.length) return;
-      const keys = Object.keys(data[0]);
-      let html = '<table><thead><tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr></thead><tbody>';
-      html += data.map(row => '<tr>' + keys.map(k => `<td>${row[k]||''}</td>`).join('') + '</tr>').join('');
-      html += '</tbody></table>';
-      container.innerHTML = html;
+    function renderArticles(container, data) {
+      container.innerHTML = data
+        .filter(row => row.REF)
+        .map(row => `<div class="card"><strong>${row.ANO || ''}</strong> - ${row.REF} ${row.LINK ? `<a href="${row.LINK}" target="_blank">[link]</a>` : ''}</div>`)
+        .join('');
+    }
+
+    function renderTeam(container, data) {
+      container.innerHTML = data
+        .filter(row => row.name)
+        .map(row => `
+          <div class="card team-card">
+            ${row.photo ? `<img src="${row.photo}" alt="${row.name}">` : ''}
+            <h3>${row.name}</h3>
+            ${row.research ? `<p>${row.research}</p>` : ''}
+            ${row.expertise ? `<p><em>${row.expertise}</em></p>` : ''}
+            <p>
+              ${row.linkedin ? `<a href="${row.linkedin}" target="_blank">LinkedIn</a>` : ''}
+              ${row.researchgate ? `| <a href="${row.researchgate}" target="_blank">ResearchGate</a>` : ''}
+              ${row.orcid ? `| <a href="${row.orcid}" target="_blank">ORCID</a>` : ''}
+            </p>
+          </div>`)
+        .join('');
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const pubsData = await fetchCSV(CONFIG.BASE + CONFIG.FILES.pubs);
-      renderTable(document.getElementById('pubs'), pubsData);
-      const teamData = await fetchCSV(CONFIG.BASE + CONFIG.FILES.team);
-      renderTable(document.getElementById('team'), teamData);
+      const pubsData = await fetchCSV(FILES.pubs);
+      renderArticles(document.getElementById('pubs'), pubsData);
+
+      const teamData = await fetchCSV(FILES.team);
+      renderTeam(document.getElementById('team'), teamData);
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </body>
 </html>
