@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equipe - TREES Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">TREES Lab</a>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="publicacoes.html" class="nav-link">Publicações</a></li>
+        <li><a href="equipe.html" class="nav-link active">Equipe</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero hero-small">
+    <div class="hero-content">
+      <h1>Nossa Equipe</h1>
+      <p class="hero-subtitle">Conheça os pesquisadores e colaboradores do TREES Lab</p>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="section">
+    <div class="container">
+      <!-- Team Statistics -->
+      <div class="section-header">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" id="total-members">0</span>
+            <span class="stat-label">Total de Membros</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="leaders-count">0</span>
+            <span class="stat-label">Líderes</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="postdocs-count">0</span>
+            <span class="stat-label">Pós-Doutorandos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="students-count">0</span>
+            <span class="stat-label">Estudantes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Members by Category (Collapsible) -->
+      <div id="team-container">
+        <div class="loading">Carregando equipe...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 TREES Lab. Todos os direitos reservados.</p>
+      <p>Grupo de Pesquisa em Sensoriamento Remoto e Ecologia</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    let teamData = [];
+
+    const categoryLabels = {
+      'leaders': 'Líderes de Pesquisa',
+      'postdocs': 'Pós-Doutorandos',
+      'phd': 'Doutorandos',
+      'master': 'Mestrandos',
+      'undergrad': 'Graduandos',
+      'collaborators': 'Colaboradores',
+      'former': 'Ex-Membros'
+    };
+
+    const categoryEmojis = {
+      'leaders': '👨‍🔬',
+      'postdocs': '🎓',
+      'phd': '📚',
+      'master': '📖',
+      'undergrad': '🎒',
+      'collaborators': '🤝',
+      'former': '👋'
+    };
+
+    async function loadTeam() {
+      try {
+        const response = await fetch('trees_lab_people_clean.csv');
+        const text = await response.text();
+        const data = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        
+        teamData = data.filter(row => row.name && row.name.trim());
+        
+        renderTeam();
+        updateStatistics();
+        
+      } catch (error) {
+        console.error('Error loading team:', error);
+        document.getElementById('team-container').innerHTML = 
+          '<div class="loading">Erro ao carregar equipe.</div>';
+      }
+    }
+
+    function renderTeam() {
+      // Group team members by category
+      const groupedByCategory = {};
+      teamData.forEach(member => {
+        const category = member.category || 'collaborators';
+        if (!groupedByCategory[category]) {
+          groupedByCategory[category] = [];
+        }
+        groupedByCategory[category].push(member);
+      });
+
+      // Order categories
+      const categoryOrder = ['leaders', 'postdocs', 'phd', 'master', 'undergrad', 'collaborators', 'former'];
+      const sortedCategories = categoryOrder.filter(cat => groupedByCategory[cat]);
+
+      const container = document.getElementById('team-container');
+      container.innerHTML = '';
+
+      sortedCategories.forEach(category => {
+        const members = groupedByCategory[category];
+        const categoryLabel = categoryLabels[category] || category;
+        const categoryEmoji = categoryEmojis[category] || '👤';
+        
+        // Create collapsible section
+        const sectionHtml = `
+          <button class="collapsible" onclick="toggleCollapsible(this)">
+            <span>${categoryEmoji} ${categoryLabel} (${members.length})</span>
+            <span class="collapsible-icon">▼</span>
+          </button>
+          <div class="collapsible-content">
+            <div class="collapsible-inner">
+              <div class="grid grid-2">
+                ${members.map(member => renderMemberCard(member)).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.innerHTML += sectionHtml;
+      });
+
+      // Auto-open leaders section
+      const firstCollapsible = container.querySelector('.collapsible');
+      if (firstCollapsible) {
+        toggleCollapsible(firstCollapsible);
+      }
+    }
+
+    function renderMemberCard(member) {
+      const initials = member.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+      
+      return `
+        <div class="card text-center">
+          ${member.photo ? 
+            `<img src="${member.photo}" alt="${member.name}" class="team-photo">` : 
+            `<div class="team-photo" style="background: linear-gradient(135deg, #2d6a57, #1f4a3a); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+              ${initials}
+            </div>`
+          }
+          <h3 class="team-name">${member.name}</h3>
+          ${member.research ? `<p class="team-research">${truncateText(member.research, 150)}</p>` : ''}
+          ${member.expertise ? `<p class="team-expertise">${member.expertise}</p>` : ''}
+          ${renderEducationInfo(member)}
+          <div class="team-links">
+            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" class="team-link" title="LinkedIn">LI</a>` : ''}
+            ${member.researchgate ? `<a href="${member.researchgate}" target="_blank" class="team-link" title="ResearchGate">RG</a>` : ''}
+            ${member.orcid ? `<a href="${member.orcid}" target="_blank" class="team-link" title="ORCID">OR</a>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEducationInfo(member) {
+      const education = [];
+      if (member.master) education.push(`Mestrado: ${member.master}`);
+      if (member.phd) education.push(`Doutorado: ${member.phd}`);
+      if (member.postdoc) education.push(`Pós-doc: ${member.postdoc}`);
+      
+      if (education.length > 0) {
+        return `<div style="font-size: 0.85rem; color: #666; margin: 0.5rem 0; text-align: left;">
+          ${education.map(edu => `<div>• ${edu}</div>`).join('')}
+        </div>`;
+      }
+      return '';
+    }
+
+    function truncateText(text, maxLength) {
+      if (text.length <= maxLength) return text;
+      return text.substring(0, maxLength) + '...';
+    }
+
+    function toggleCollapsible(button) {
+      const content = button.nextElementSibling;
+      const isActive = button.classList.contains('active');
+      
+      // Close all other collapsibles
+      document.querySelectorAll('.collapsible').forEach(col => {
+        col.classList.remove('active');
+        col.nextElementSibling.classList.remove('active');
+      });
+      
+      // Toggle current collapsible
+      if (!isActive) {
+        button.classList.add('active');
+        content.classList.add('active');
+      }
+    }
+
+    function updateStatistics() {
+      const total = teamData.length;
+      
+      // Count by category
+      const leaders = teamData.filter(member => member.category === 'leaders').length;
+      const postdocs = teamData.filter(member => member.category === 'postdocs').length;
+      const students = teamData.filter(member => 
+        ['phd', 'master', 'undergrad'].includes(member.category)
+      ).length;
+      
+      // Animate counters
+      animateCounter('total-members', total);
+      animateCounter('leaders-count', leaders);
+      animateCounter('postdocs-count', postdocs);
+      animateCounter('students-count', students);
+    }
+
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      let current = 0;
+      const increment = target / 30;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = Math.floor(current);
+      }, 50);
+    }
+
+    // Scroll animations
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollAnimations();
+      loadTeam();
+    });
+  </script>
+</body>
+</html>

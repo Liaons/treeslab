@@ -4,7 +4,253 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TREES Lab - Sensoriamento Remoto e Ecologia</title>
-  <style>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">TREES Lab</a>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link active">Início</a></li>
+        <li><a href="publicacoes.html" class="nav-link">Publicações</a></li>
+        <li><a href="equipe.html" class="nav-link">Equipe</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="fade-in">TREES Lab</h1>
+      <p class="hero-subtitle fade-in">Grupo de Pesquisa em Sensoriamento Remoto e Ecologia</p>
+      <p class="hero-description fade-in">
+        Desenvolvendo pesquisas inovadoras em sensoriamento remoto, ecologia e análise ambiental 
+        para um futuro mais sustentável e consciente.
+      </p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Sobre o TREES Lab</h2>
+        <p class="section-subtitle">
+          Comprometidos com a excelência em pesquisa e inovação tecnológica
+        </p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="fade-in">
+          <div class="card">
+            <h3 style="color: #2d6a57; margin-bottom: 1rem;">🌳 Nossa Missão</h3>
+            <p>
+              Desenvolver tecnologias inovadoras e metodologias científicas que contribuam para a 
+              compreensão e preservação dos ecossistemas naturais através do sensoriamento remoto 
+              e análise ecológica avançada.
+            </p>
+          </div>
+        </div>
+        
+        <div class="fade-in">
+          <div class="card">
+            <h3 style="color: #2d6a57; margin-bottom: 1rem;">🔬 Nossa Abordagem</h3>
+            <p>
+              Combinamos expertise em geotecnologias, análise de dados espaciais e ecologia 
+              para abordar desafios ambientais contemporâneos através de pesquisas 
+              interdisciplinares de alto impacto.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="stats-grid fade-in">
+        <div class="stat-item">
+          <span class="stat-number" id="publications-count">0</span>
+          <span class="stat-label">Publicações Científicas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="team-count">0</span>
+          <span class="stat-label">Pesquisadores</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <span class="stat-label">Anos de Experiência</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Projetos Ativos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research Areas Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Áreas de Pesquisa</h2>
+        <p class="section-subtitle">
+          Nossos principais focos de investigação científica
+        </p>
+      </div>
+      
+      <div class="grid grid-3">
+        <div class="card fade-in">
+          <h3 style="color: #2d6a57; margin-bottom: 1rem;">🛰️ Sensoriamento Remoto</h3>
+          <p>
+            Desenvolvimento e aplicação de técnicas avançadas de sensoriamento remoto para 
+            monitoramento ambiental, incluindo análise de dados satelitais e processamento 
+            de imagens multiespectrais.
+          </p>
+        </div>
+        
+        <div class="card fade-in">
+          <h3 style="color: #2d6a57; margin-bottom: 1rem;">🌿 Ecologia de Ecossistemas</h3>
+          <p>
+            Estudo da dinâmica de carbono em ecossistemas florestais, mudanças climáticas 
+            e ambientais, com foco especial nos biomas amazônico e cerrado brasileiro.
+          </p>
+        </div>
+        
+        <div class="card fade-in">
+          <h3 style="color: #2d6a57; margin-bottom: 1rem;">🔥 Distúrbios Florestais</h3>
+          <p>
+            Monitoramento e análise de perturbações florestais, incluindo desmatamento, 
+            incêndios e degradação, utilizando tecnologias de detecção precoce.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Highlights Section -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Destaques Recentes</h2>
+        <p class="section-subtitle">
+          Algumas de nossas conquistas e publicações mais relevantes
+        </p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="card fade-in">
+          <div class="publication-year">2023</div>
+          <h4 style="color: #333; margin-bottom: 1rem;">Publicações em Revistas de Alto Impacto</h4>
+          <p>
+            Nossos pesquisadores publicaram trabalhos nas prestigiadas revistas Science e Nature, 
+            demonstrando o reconhecimento internacional de nossa pesquisa em ecologia amazônica 
+            e sensoriamento remoto.
+          </p>
+          <a href="publicacoes.html" class="publication-link">Ver todas as publicações →</a>
+        </div>
+        
+        <div class="card fade-in">
+          <div class="publication-year">2024</div>
+          <h4 style="color: #333; margin-bottom: 1rem;">Projetos Internacionais</h4>
+          <p>
+            Colaborações ativas com universidades e institutos de pesquisa internacionais, 
+            incluindo University of Oxford, NASA Goddard Space Flight Center e outras 
+            instituições de renome mundial.
+          </p>
+          <a href="equipe.html" class="publication-link">Conheça nossa equipe →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 TREES Lab. Todos os direitos reservados.</p>
+      <p>Grupo de Pesquisa em Sensoriamento Remoto e Ecologia</p>
+      <p style="margin-top: 1rem; opacity: 0.8;">
+        Instituto Nacional de Pesquisas Espaciais (INPE) | 
+        <a href="mailto:contato@treeslab.org" style="color: #fff;">contato@treeslab.org</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    // Load basic statistics
+    async function loadStats() {
+      try {
+        // Load publications count
+        const pubsRes = await fetch('peer_reviewed_scientific_articles.csv');
+        const pubsText = await pubsRes.text();
+        const pubsData = Papa.parse(pubsText, { header: true, skipEmptyLines: true }).data;
+        const validPubs = pubsData.filter(row => row.REF && row.REF.trim());
+        
+        // Load team count
+        const teamRes = await fetch('trees_lab_people_clean.csv');
+        const teamText = await teamRes.text();
+        const teamData = Papa.parse(teamText, { header: true, skipEmptyLines: true }).data;
+        const validTeam = teamData.filter(row => row.name && row.name.trim());
+        
+        // Update counters
+        animateCounter('publications-count', validPubs.length);
+        animateCounter('team-count', validTeam.length);
+        
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    // Counter animation
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      let current = 0;
+      const increment = target / 30;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = Math.floor(current);
+      }, 50);
+    }
+
+    // Scroll animations
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollAnimations();
+      loadStats();
+      
+      // Trigger initial animations
+      setTimeout(() => {
+        document.querySelectorAll('.fade-in').forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, index * 100);
+        });
+      }, 300);
+    });
+  </script>
+</body>
+</html>
     * {
       margin: 0;
       padding: 0;
@@ -12,7 +258,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Inter', sans-serif;
       line-height: 1.6;
       color: #333;
       background: #fff;
@@ -89,6 +335,22 @@
       align-items: center;
       position: relative;
       overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-100px); }
     }
 
     .hero-content {
@@ -339,8 +601,6 @@
       border-radius: 50%;
       text-decoration: none;
       transition: all 0.3s ease;
-      font-size: 0.8rem;
-      font-weight: bold;
     }
 
     .team-link:hover {
@@ -395,7 +655,7 @@
       }
     }
 
-    /* Animações */
+    /* Scroll animations */
     .fade-in {
       opacity: 0;
       transform: translateY(30px);
@@ -406,16 +666,9 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* Indicador de carregamento */
-    .loading {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-    }
   </style>
 </head>
-
+<body>
 <body>
   <!-- Navigation -->
   <nav class="navbar">
@@ -500,7 +753,7 @@
       </div>
       
       <div class="publications-grid" id="pubs">
-        <div class="loading">Carregando publicações...</div>
+        <!-- Publications will be loaded here -->
       </div>
     </div>
   </section>
@@ -516,7 +769,7 @@
       </div>
       
       <div class="team-grid" id="team">
-        <div class="loading">Carregando equipe...</div>
+        <!-- Team members will be loaded here -->
       </div>
     </div>
   </section>
@@ -537,51 +790,35 @@
     };
 
     async function fetchCSV(path) {
-      try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const text = await res.text();
-        return Papa.parse(text, { header: true, skipEmptyLines: true }).data;
-      } catch (error) {
-        console.error('Error fetching CSV:', error);
-        return [];
-      }
+      const res = await fetch(path);
+      const text = await res.text();
+      return Papa.parse(text, { header: true, skipEmptyLines: true }).data;
     }
 
     function renderArticles(container, data) {
-      const validArticles = data.filter(row => row.REF && row.REF.trim());
+      const validArticles = data.filter(row => row.REF);
       
       // Update publications count
       document.getElementById('publications-count').textContent = validArticles.length;
       
-      if (validArticles.length === 0) {
-        container.innerHTML = '<div class="loading">Nenhuma publicação encontrada.</div>';
-        return;
-      }
-
       container.innerHTML = validArticles
         .map(row => `
           <div class="publication-card fade-in">
             <span class="publication-year">${row.ANO || 'N/A'}</span>
             <div class="publication-title">${row.REF}</div>
             ${row.LINK ? `<a href="${row.LINK}" target="_blank" class="publication-link">
-              🔗 Acessar Publicação
+              <i class="fas fa-external-link-alt"></i> Acessar Publicação
             </a>` : ''}
           </div>`)
         .join('');
     }
 
     function renderTeam(container, data) {
-      const validMembers = data.filter(row => row.name && row.name.trim());
+      const validMembers = data.filter(row => row.name);
       
       // Update team count
       document.getElementById('team-count').textContent = validMembers.length;
       
-      if (validMembers.length === 0) {
-        container.innerHTML = '<div class="loading">Nenhum membro encontrado.</div>';
-        return;
-      }
-
       container.innerHTML = validMembers
         .map(row => `
           <div class="team-card fade-in">
@@ -590,12 +827,18 @@
                 ${row.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
               </div>`}
             <h3 class="team-name">${row.name}</h3>
-            ${row.research ? `<p class="team-research">${row.research.substring(0, 150)}${row.research.length > 150 ? '...' : ''}</p>` : ''}
+            ${row.research ? `<p class="team-research">${row.research}</p>` : ''}
             ${row.expertise ? `<p class="team-expertise">${row.expertise}</p>` : ''}
             <div class="team-links">
-              ${row.linkedin ? `<a href="${row.linkedin}" target="_blank" class="team-link" title="LinkedIn">LI</a>` : ''}
-              ${row.researchgate ? `<a href="${row.researchgate}" target="_blank" class="team-link" title="ResearchGate">RG</a>` : ''}
-              ${row.orcid ? `<a href="${row.orcid}" target="_blank" class="team-link" title="ORCID">OR</a>` : ''}
+              ${row.linkedin ? `<a href="${row.linkedin}" target="_blank" class="team-link" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </a>` : ''}
+              ${row.researchgate ? `<a href="${row.researchgate}" target="_blank" class="team-link" title="ResearchGate">
+                <i class="fab fa-researchgate"></i>
+              </a>` : ''}
+              ${row.orcid ? `<a href="${row.orcid}" target="_blank" class="team-link" title="ORCID">
+                <i class="fab fa-orcid"></i>
+              </a>` : ''}
             </div>
           </div>`)
         .join('');
@@ -630,18 +873,9 @@
         rootMargin: '0px 0px -50px 0px'
       });
 
-      // Observe existing elements
       document.querySelectorAll('.fade-in').forEach(el => {
         observer.observe(el);
       });
-
-      // Function to observe new elements
-      window.observeNewElements = function() {
-        document.querySelectorAll('.fade-in:not(.observed)').forEach(el => {
-          el.classList.add('observed');
-          observer.observe(el);
-        });
-      };
     }
 
     // Navbar background on scroll
@@ -663,24 +897,20 @@
       const counters = document.querySelectorAll('#publications-count, #team-count');
       counters.forEach(counter => {
         const target = parseInt(counter.textContent);
-        if (target > 0) {
-          let current = 0;
-          const increment = target / 30;
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-              current = target;
-              clearInterval(timer);
-            }
-            counter.textContent = Math.floor(current);
-          }, 50);
-        }
+        let current = 0;
+        const increment = target / 30;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          counter.textContent = Math.floor(current);
+        }, 50);
       });
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      console.log('Página carregada, iniciando...');
-      
       // Initialize features
       smoothScroll();
       initScrollAnimations();
@@ -688,27 +918,16 @@
 
       // Load data
       try {
-        console.log('Carregando dados...');
-        
         const pubsData = await fetchCSV(FILES.pubs);
-        console.log('Publicações carregadas:', pubsData.length);
         renderArticles(document.getElementById('pubs'), pubsData);
 
         const teamData = await fetchCSV(FILES.team);
-        console.log('Equipe carregada:', teamData.length);
         renderTeam(document.getElementById('team'), teamData);
-
-        // Observe new elements
-        window.observeNewElements();
 
         // Animate counters after data is loaded
         setTimeout(animateCounters, 1000);
-        
-        console.log('Dados carregados com sucesso!');
       } catch (error) {
         console.error('Error loading data:', error);
-        document.getElementById('pubs').innerHTML = '<div class="loading">Erro ao carregar publicações.</div>';
-        document.getElementById('team').innerHTML = '<div class="loading">Erro ao carregar equipe.</div>';
       }
 
       // Trigger initial animations

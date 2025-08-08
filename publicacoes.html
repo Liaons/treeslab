@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publicações - TREES Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">TREES Lab</a>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="publicacoes.html" class="nav-link active">Publicações</a></li>
+        <li><a href="equipe.html" class="nav-link">Equipe</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero hero-small">
+    <div class="hero-content">
+      <h1>Publicações Científicas</h1>
+      <p class="hero-subtitle">Nossos trabalhos publicados em periódicos de renome internacional</p>
+    </div>
+  </section>
+
+  <!-- Publications Section -->
+  <section class="section">
+    <div class="container">
+      <!-- Filter by Year -->
+      <div class="section-header">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" id="total-publications">0</span>
+            <span class="stat-label">Total de Publicações</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="recent-publications">0</span>
+            <span class="stat-label">Publicações Recentes (2023-2024)</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="high-impact">0</span>
+            <span class="stat-label">Revistas de Alto Impacto</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="years-active">0</span>
+            <span class="stat-label">Anos de Atividade</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publications by Year (Collapsible) -->
+      <div id="publications-container">
+        <div class="loading">Carregando publicações...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 TREES Lab. Todos os direitos reservados.</p>
+      <p>Grupo de Pesquisa em Sensoriamento Remoto e Ecologia</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    let publicationsData = [];
+
+    async function loadPublications() {
+      try {
+        const response = await fetch('peer_reviewed_scientific_articles.csv');
+        const text = await response.text();
+        const data = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        
+        publicationsData = data.filter(row => row.REF && row.REF.trim());
+        
+        renderPublications();
+        updateStatistics();
+        
+      } catch (error) {
+        console.error('Error loading publications:', error);
+        document.getElementById('publications-container').innerHTML = 
+          '<div class="loading">Erro ao carregar publicações.</div>';
+      }
+    }
+
+    function renderPublications() {
+      // Group publications by year
+      const groupedByYear = {};
+      publicationsData.forEach(pub => {
+        const year = pub.ANO || 'Sem ano';
+        if (!groupedByYear[year]) {
+          groupedByYear[year] = [];
+        }
+        groupedByYear[year].push(pub);
+      });
+
+      // Sort years in descending order
+      const sortedYears = Object.keys(groupedByYear).sort((a, b) => {
+        if (a === 'Sem ano') return 1;
+        if (b === 'Sem ano') return -1;
+        return parseInt(b) - parseInt(a);
+      });
+
+      const container = document.getElementById('publications-container');
+      container.innerHTML = '';
+
+      sortedYears.forEach(year => {
+        const publications = groupedByYear[year];
+        
+        // Create collapsible section
+        const sectionHtml = `
+          <button class="collapsible" onclick="toggleCollapsible(this)">
+            <span>${year} (${publications.length} publicação${publications.length !== 1 ? 'ões' : ''})</span>
+            <span class="collapsible-icon">▼</span>
+          </button>
+          <div class="collapsible-content">
+            <div class="collapsible-inner">
+              <div class="grid">
+                ${publications.map(pub => `
+                  <div class="card">
+                    <div class="publication-year">${pub.ANO || 'N/A'}</div>
+                    <div class="publication-title">${pub.REF}</div>
+                    ${pub.LINK ? `
+                      <a href="${pub.LINK}" target="_blank" class="publication-link">
+                        🔗 Acessar Publicação
+                      </a>
+                    ` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.innerHTML += sectionHtml;
+      });
+
+      // Auto-open the most recent year
+      if (sortedYears.length > 0) {
+        const firstCollapsible = container.querySelector('.collapsible');
+        if (firstCollapsible) {
+          toggleCollapsible(firstCollapsible);
+        }
+      }
+    }
+
+    function toggleCollapsible(button) {
+      const content = button.nextElementSibling;
+      const isActive = button.classList.contains('active');
+      
+      // Close all other collapsibles
+      document.querySelectorAll('.collapsible').forEach(col => {
+        col.classList.remove('active');
+        col.nextElementSibling.classList.remove('active');
+      });
+      
+      // Toggle current collapsible
+      if (!isActive) {
+        button.classList.add('active');
+        content.classList.add('active');
+      }
+    }
+
+    function updateStatistics() {
+      const total = publicationsData.length;
+      
+      // Recent publications (2023-2024)
+      const recentPubs = publicationsData.filter(pub => {
+        const year = parseInt(pub.ANO);
+        return year >= 2023 && year <= 2024;
+      }).length;
+      
+      // High impact journals (approximation based on keywords)
+      const highImpactKeywords = ['Nature', 'Science', 'PNAS', 'Nature Climate', 'Scientific Reports'];
+      const highImpact = publicationsData.filter(pub => {
+        return highImpactKeywords.some(keyword => 
+          pub.REF.toLowerCase().includes(keyword.toLowerCase())
+        );
+      }).length;
+      
+      // Years active
+      const years = publicationsData
+        .map(pub => parseInt(pub.ANO))
+        .filter(year => !isNaN(year));
+      const yearsActive = years.length > 0 ? 
+        Math.max(...years) - Math.min(...years) + 1 : 0;
+      
+      // Animate counters
+      animateCounter('total-publications', total);
+      animateCounter('recent-publications', recentPubs);
+      animateCounter('high-impact', highImpact);
+      animateCounter('years-active', yearsActive);
+    }
+
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      let current = 0;
+      const increment = target / 30;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = Math.floor(current);
+      }, 50);
+    }
+
+    // Scroll animations
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollAnimations();
+      loadPublications();
+    });
+  </script>
+</body>
+</html>
