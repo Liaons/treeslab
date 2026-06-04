@@ -1,6 +1,7 @@
 # TREES Lab Website
 
-Site oficial do TREES Lab - Grupo de Pesquisa em Sensoriamento Remoto e Ecologia.
+Proposta para o novo site do TREES - Grupo de Pesquisa em Sensoriamento Remoto e Ecologia.
+https://liaons.github.io/treeslab/
 
 ## 🌐 Estrutura do Site
 
