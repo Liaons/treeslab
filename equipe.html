@@ -73,24 +73,33 @@
     let teamData = [];
 
     const categoryLabels = {
-      'leaders': 'Líderes de Pesquisa',
-      'postdocs': 'Pós-Doutorandos',
-      'phd': 'Doutorandos',
-      'master': 'Mestrandos',
-      'undergrad': 'Graduandos',
-      'collaborators': 'Colaboradores',
-      'former': 'Ex-Membros'
+      'leaders':             'Líderes de Pesquisa',
+      'postdocs':            'Pós-Doutorandos',
+      'phd':                 'Doutorandos',
+      'master':              'Mestrandos',
+      'undergrad':           'Graduandos',
+      'collaborators':       'Colaboradores',
+      'scientific partners': 'Parceiros Científicos',
+      'alumini':             'Egressos',
+      'former':              'Ex-Membros'
     };
 
     const categoryEmojis = {
-      'leaders': '👨‍🔬',
-      'postdocs': '🎓',
-      'phd': '📚',
-      'master': '📖',
-      'undergrad': '🎒',
-      'collaborators': '🤝',
-      'former': '👋'
+      'leaders':             '👨‍🔬',
+      'postdocs':            '🎓',
+      'phd':                 '📚',
+      'master':              '📖',
+      'undergrad':           '🎒',
+      'collaborators':       '🤝',
+      'scientific partners': '🌐',
+      'alumini':             '🏛️',
+      'former':              '👋'
     };
+
+    const categoryOrder = [
+      'leaders', 'postdocs', 'phd', 'master', 'undergrad',
+      'collaborators', 'scientific partners', 'alumini', 'former'
+    ];
 
     async function loadTeam() {
       try {
@@ -125,8 +134,7 @@
         groupedByCategory[category].push(member);
       });
 
-      // Order categories
-      const categoryOrder = ['leaders', 'postdocs', 'phd', 'master', 'undergrad', 'collaborators', 'former'];
+      // Order categories (uses categoryOrder defined above in the closures)
       const sortedCategories = categoryOrder.filter(cat => groupedByCategory[cat]);
 
       const container = document.getElementById('team-container');
